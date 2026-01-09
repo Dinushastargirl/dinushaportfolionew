@@ -1,10 +1,18 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Scene3D from './components/Scene3D';
-import Window from './components/Window';
 import { WindowType } from './types';
 import { AnimatePresence, motion } from 'framer-motion';
-import { Terminal, Cpu, Zap, Activity, Home as HomeIcon, Layout, History, Mail, GraduationCap } from 'lucide-react';
+import { 
+  User, 
+  Layers, 
+  Map, 
+  Mail, 
+  GraduationCap, 
+  X, 
+  Terminal,
+  Menu
+} from 'lucide-react';
 
 // Import Pages
 import Home from './components/pages/Home';
@@ -15,19 +23,12 @@ import Qualifications from './components/pages/Qualifications';
 
 const App: React.FC = () => {
   const [activeZone, setActiveZone] = useState<WindowType | null>(null);
-  const [logs, setLogs] = useState<string[]>([
-    "System initialized...", 
-    "Establishing neural link...", 
-    "Welcome, Creative Technologist."
-  ]);
-
-  const addLog = (msg: string) => {
-    setLogs(prev => [...prev.slice(-4), `> ${msg}`]);
-  };
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const navigateTo = (type: WindowType) => {
+    console.log("Navigating to:", type);
     setActiveZone(type);
-    addLog(`Accessing ${type} module...`);
+    setMobileMenuOpen(false);
   };
 
   const getPage = () => {
@@ -42,120 +43,131 @@ const App: React.FC = () => {
   };
 
   const menuItems = [
-    { type: WindowType.HOME, icon: HomeIcon, label: "About" },
-    { type: WindowType.PROJECTS, icon: Layout, label: "Projects" },
-    { type: WindowType.JOURNEY, icon: History, label: "Journey" },
-    { type: WindowType.CONTACT, icon: Mail, label: "Contact" },
-    { type: WindowType.QUALIFICATIONS, icon: GraduationCap, label: "Certs" },
+    { type: WindowType.HOME, icon: User, label: "Profile" },
+    { type: WindowType.PROJECTS, icon: Layers, label: "Projects" },
+    { type: WindowType.JOURNEY, icon: Map, label: "Path" },
+    { type: WindowType.QUALIFICATIONS, icon: GraduationCap, label: "Archive" },
+    { type: WindowType.CONTACT, icon: Mail, label: "Signal" },
   ];
 
   return (
-    <div className="relative w-screen h-screen overflow-hidden bg-black font-mono text-white selection:bg-neon-cyan selection:text-black">
-      {/* 3D Core Interaction Layer */}
+    <div className="relative w-screen h-screen overflow-hidden bg-[#020203] text-[#00ff41] font-mono selection:bg-[#00ff41] selection:text-black">
+      {/* 3D Cyber Layer */}
       <Scene3D onNavigate={navigateTo} activeZone={activeZone || undefined} />
 
-      {/* Interface HUD Overlay */}
-      <div className="absolute inset-0 pointer-events-none z-10 flex flex-col justify-between p-4 md:p-8">
-        
-        {/* Top Header */}
-        <div className="flex justify-between items-start">
-          <motion.div 
-            initial={{ x: -20, opacity: 0 }}
-            animate={{ x: 0, opacity: 1 }}
-            className="flex flex-col"
-          >
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-neon-cyan/20 border border-neon-cyan flex items-center justify-center rounded">
-                <Cpu size={20} className="text-neon-cyan" />
-              </div>
-              <div>
-                <h1 className="text-xl font-black tracking-tighter text-white">DINUSHA.EXE</h1>
-                <div className="flex items-center gap-2 text-[8px] text-neon-pink font-bold">
-                  <Activity size={10} className="animate-pulse" />
-                  <span>CORE_STATUS: OPERATIONAL</span>
-                </div>
-              </div>
-            </div>
-          </motion.div>
+      {/* Global Interface HUD */}
+      <header className="fixed top-0 left-0 right-0 z-[200] p-4 md:p-8 flex justify-between items-center pointer-events-none">
+        <motion.div 
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          className="flex items-center gap-2 group cursor-crosshair pointer-events-auto"
+        >
+          <Terminal size={20} className="animate-pulse" />
+          <span className="text-xs tracking-[0.4em] font-black uppercase">Dinusha.Sys</span>
+        </motion.div>
 
-          {/* Quick Nav HUD */}
-          <div className="hidden lg:flex gap-2 pointer-events-auto">
+        {/* Desktop Nav - CRITICAL: Added pointer-events-auto to ensure clicks register */}
+        <nav className="hidden md:flex items-center gap-2 p-1 bg-black/60 backdrop-blur-xl border border-[#00ff41]/20 rounded-full pointer-events-auto shadow-[0_0_20px_rgba(0,255,65,0.1)]">
+          {menuItems.map((item) => (
+            <button
+              key={item.type}
+              onClick={() => navigateTo(item.type)}
+              className={`relative px-5 py-2 rounded-full flex items-center gap-2 transition-all hover:bg-[#00ff41]/10 z-10 ${
+                activeZone === item.type ? 'text-black' : 'text-[#00ff41]'
+              }`}
+            >
+              <item.icon size={14} className="pointer-events-none" />
+              <span className="text-[10px] font-bold uppercase tracking-widest pointer-events-none">{item.label}</span>
+              {activeZone === item.type && (
+                <motion.div 
+                  layoutId="active-pill"
+                  className="absolute inset-0 bg-[#00ff41] rounded-full -z-10"
+                  transition={{ type: "spring", bounce: 0.2, duration: 0.4 }}
+                />
+              )}
+            </button>
+          ))}
+        </nav>
+
+        {/* Mobile Toggle */}
+        <button 
+          className="md:hidden p-3 bg-black/40 border border-[#00ff41]/20 rounded-full text-[#00ff41] pointer-events-auto"
+          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+        >
+          <Menu size={24} />
+        </button>
+      </header>
+
+      {/* Mobile Menu Overlay */}
+      <AnimatePresence>
+        {mobileMenuOpen && (
+          <motion.div 
+            initial={{ opacity: 0, x: '100%' }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: '100%' }}
+            className="fixed inset-0 z-[250] bg-black/95 backdrop-blur-2xl flex flex-col p-8 pt-24 gap-6"
+          >
+            <button onClick={() => setMobileMenuOpen(false)} className="absolute top-8 right-8 text-[#00ff41] p-2">
+              <X size={32} />
+            </button>
             {menuItems.map((item) => (
               <button
                 key={item.type}
                 onClick={() => navigateTo(item.type)}
-                className={`flex flex-col items-center gap-1 p-3 rounded border transition-all ${
-                  activeZone === item.type 
-                    ? 'bg-neon-cyan/20 border-neon-cyan text-neon-cyan' 
-                    : 'bg-white/5 border-white/10 text-gray-400 hover:border-white/40 hover:text-white'
-                }`}
+                className={`flex items-center gap-4 text-3xl font-black uppercase tracking-tighter hover:text-white text-left p-2 border-b border-white/5 ${activeZone === item.type ? 'text-white' : 'text-[#00ff41]'}`}
               >
-                <item.icon size={16} />
-                <span className="text-[8px] font-bold uppercase tracking-widest">{item.label}</span>
+                <item.icon size={24} />
+                {item.label}
               </button>
             ))}
-          </div>
-        </div>
-
-        {/* Bottom Panel */}
-        <div className="flex flex-col md:flex-row justify-between items-end gap-4">
-          {/* Terminal Diagnostics */}
-          <div className="w-full max-w-sm pointer-events-auto">
-            <div className="bg-black/80 backdrop-blur-xl border border-white/10 p-4 rounded-lg shadow-2xl">
-              <div className="flex items-center justify-between mb-2 border-b border-white/5 pb-1">
-                <div className="flex items-center gap-2 text-neon-yellow">
-                  <Terminal size={12} />
-                  <span className="text-[9px] font-bold uppercase tracking-widest">Diagnostics</span>
-                </div>
-                <div className="text-[8px] text-gray-600">LN 42 COL 10</div>
-              </div>
-              <div className="space-y-1 h-20 overflow-hidden">
-                {logs.map((log, i) => (
-                  <motion.div 
-                    initial={{ opacity: 0, x: -5 }} 
-                    animate={{ opacity: 1, x: 0 }} 
-                    key={i} 
-                    className="text-[10px] text-gray-400"
-                  >
-                    {log}
-                  </motion.div>
-                ))}
-              </div>
-            </div>
-          </div>
-
-          {/* Core Controls */}
-          <div className="flex gap-4 pointer-events-auto bg-white/5 p-2 rounded-full border border-white/10 backdrop-blur-md">
-            <button 
-              onClick={() => setActiveZone(null)}
-              className="p-4 rounded-full bg-neon-pink/10 border border-neon-pink/30 hover:bg-neon-pink/20 transition-all text-neon-pink flex items-center justify-center shadow-[0_0_20px_rgba(255,0,255,0.2)]"
-              title="Return to Core"
-            >
-              <Zap size={24} fill="currentColor" />
-            </button>
-          </div>
-        </div>
-      </div>
-
-      {/* Active Module Container */}
-      <AnimatePresence>
-        {activeZone && (
-          <Window
-            id={activeZone}
-            title={activeZone.toString()}
-            zIndex={50}
-            onClose={() => setActiveZone(null)}
-            onMinimize={() => setActiveZone(null)}
-            onClick={() => {}}
-          >
-            {getPage()}
-          </Window>
+          </motion.div>
         )}
       </AnimatePresence>
 
-      {/* Static Visual Overlays */}
-      <div className="absolute inset-0 pointer-events-none opacity-[0.03] bg-[url('https://grainy-gradients.vercel.app/noise.svg')] z-50" />
-      <div className="absolute inset-0 pointer-events-none border-[20px] border-white/5 z-40" />
+      {/* Content Overlay */}
+      <AnimatePresence>
+        {activeZone && (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.98 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 1.02 }}
+            className="fixed inset-0 z-[150] bg-[#020203]/95 backdrop-blur-3xl overflow-y-auto custom-scrollbar"
+          >
+            <div className="min-h-screen flex flex-col items-center py-24 md:py-32 px-4 md:px-6">
+              <div className="w-full max-w-6xl relative">
+                <div className="flex justify-between items-center mb-12 border-b border-[#00ff41]/20 pb-4">
+                  <div className="text-[10px] tracking-[0.3em] font-bold opacity-50 uppercase flex items-center gap-2">
+                    <span className="w-2 h-2 bg-[#00ff41] rounded-full animate-ping" />
+                    Module_Active: {activeZone}
+                  </div>
+                  <button 
+                    onClick={() => setActiveZone(null)}
+                    className="p-3 border border-[#00ff41]/40 rounded hover:bg-[#00ff41] hover:text-black transition-all flex items-center gap-2 group"
+                  >
+                    <span className="text-[10px] uppercase tracking-widest hidden sm:inline">Terminate</span>
+                    <X size={20} />
+                  </button>
+                </div>
+                {getPage()}
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Ambient Hacker Elements */}
+      <div className="absolute top-1/2 left-8 -translate-y-1/2 hidden xl:flex flex-col gap-4 opacity-20 text-[8px] pointer-events-none select-none">
+        {[...Array(12)].map((_, i) => (
+          <div key={i} className="font-mono">
+            SEC_LOG::{i} -> {Math.random().toString(16).slice(2, 10).toUpperCase()}
+            <span className="ml-2 text-white/20">[{new Date().toLocaleTimeString()}]</span>
+          </div>
+        ))}
+      </div>
+
+      {/* CRT Scanline & Grain Effect */}
+      <div className="absolute inset-0 pointer-events-none opacity-[0.05] bg-[url('https://grainy-gradients.vercel.app/noise.svg')] z-[300] mix-blend-overlay" />
+      <div className="absolute inset-0 pointer-events-none opacity-[0.03] bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.25)_50%),linear-gradient(90deg,rgba(255,0,0,0.06),rgba(0,255,0,0.02),rgba(0,0,255,0.06))] z-[200] bg-[length:100%_2px,3px_100%]" />
     </div>
   );
 };

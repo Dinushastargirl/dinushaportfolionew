@@ -1,66 +1,69 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
-import { BIO, SKILLS } from '../../constants';
-import { Github, Linkedin, Mail, ArrowRight } from 'lucide-react';
+// Fixed missing Terminal import
+import { ArrowRight, Github, Linkedin, Cpu, Activity, ShieldCheck, Terminal } from 'lucide-react';
 
 const Home: React.FC = () => {
   return (
-    <div className="flex flex-col gap-12 py-8">
-      <div className="space-y-8">
+    <div className="space-y-12">
+      <div className="grid lg:grid-cols-2 gap-12 items-start">
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
+          initial={{ opacity: 0, x: -20 }}
+          animate={{ opacity: 1, x: 0 }}
+          className="space-y-8"
         >
-          <span className="text-neon-pink font-bold tracking-[0.3em] text-xs uppercase mb-4 block">Creative Technologist</span>
-          <h1 className="text-6xl md:text-8xl font-black leading-none tracking-tighter">
-            CODE <span className="text-transparent border-t-2 border-b-2 border-white px-2">MEETS</span> ART
+          <div className="inline-block px-3 py-1 bg-[#00ff41]/10 border border-[#00ff41]/40 rounded text-[10px] font-bold uppercase tracking-[0.2em]">
+            Permission: Admin
+          </div>
+          <h1 className="text-5xl md:text-8xl font-black leading-none tracking-tighter uppercase italic">
+            Dinusha <br /> <span className="text-white">Pushparajah</span>
           </h1>
-        </motion.div>
-
-        <motion.div 
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.3 }}
-          className="max-w-2xl"
-        >
-          <p className="text-xl md:text-2xl text-gray-300 font-light leading-relaxed">
-            I am <span className="text-white font-bold">Dinusha Pushparajah</span>. 
-            I architect digital experiences that bridge the gap between technical complexity and human intuition.
+          <p className="text-xl text-[#00ff41]/60 leading-relaxed font-mono">
+            Creative Technologist & Builder. <br />
+            I bridge the gap between high-level engineering and immersive artistic vision. 
+            Currently architecting digital experiences and hardware solutions.
           </p>
+          
+          <div className="flex flex-wrap gap-4">
+            <a href="#" className="px-6 py-3 bg-[#00ff41] text-black font-bold text-xs uppercase tracking-widest hover:bg-white transition-all">
+              Execute Portfolio.sh
+            </a>
+            <div className="flex gap-4">
+              <a href="#" className="p-3 border border-[#00ff41]/20 hover:bg-[#00ff41]/10"><Github size={18} /></a>
+              <a href="#" className="p-3 border border-[#00ff41]/20 hover:bg-[#00ff41]/10"><Linkedin size={18} /></a>
+            </div>
+          </div>
         </motion.div>
 
-        <div className="flex flex-wrap gap-4">
-          <button className="px-8 py-4 bg-white text-black font-bold flex items-center gap-3 hover:bg-neon-cyan transition-colors">
-            VIEW EXPERIMENTS <ArrowRight size={18} />
-          </button>
-          <div className="flex gap-2">
-            <a href="#" className="p-4 bg-white/5 border border-white/10 hover:border-white transition-colors">
-                <Github size={20} />
-            </a>
-            <a href="#" className="p-4 bg-white/5 border border-white/10 hover:border-white transition-colors">
-                <Linkedin size={20} />
-            </a>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="p-6 border border-[#00ff41]/20 bg-[#00ff41]/5 rounded group hover:border-[#00ff41] transition-all">
+            <Cpu className="mb-4 opacity-50 group-hover:opacity-100" />
+            <h3 className="text-lg font-bold mb-2 uppercase tracking-tighter">Hardware Eng</h3>
+            <p className="text-xs opacity-60">Architecting 'One Dial' from scratch. IoT & PCB design.</p>
+          </div>
+          <div className="p-6 border border-[#00ff41]/20 bg-[#00ff41]/5 rounded group hover:border-[#00ff41] transition-all">
+            <ShieldCheck className="mb-4 opacity-50 group-hover:opacity-100" />
+            <h3 className="text-lg font-bold mb-2 uppercase tracking-tighter">CyberOps</h3>
+            <p className="text-xs opacity-60">Security-first development mindset across all technical stacks.</p>
+          </div>
+          <div className="p-6 border border-[#00ff41]/20 bg-[#00ff41]/5 rounded group hover:border-[#00ff41] transition-all">
+            <Activity className="mb-4 opacity-50 group-hover:opacity-100" />
+            <h3 className="text-lg font-bold mb-2 uppercase tracking-tighter">AI Systems</h3>
+            <p className="text-xs opacity-60">Integrating MediaPipe & computer vision for interaction.</p>
+          </div>
+          <div className="p-6 border border-[#00ff41]/20 bg-[#00ff41]/5 rounded group hover:border-[#00ff41] transition-all">
+            <Terminal className="mb-4 opacity-50 group-hover:opacity-100" />
+            <h3 className="text-lg font-bold mb-2 uppercase tracking-tighter">Full Stack</h3>
+            <p className="text-xs opacity-60">Python, Rust, React. Building robust backend architectures.</p>
           </div>
         </div>
       </div>
-
-      <div className="grid md:grid-cols-3 gap-6 border-t border-white/10 pt-12">
-        <div className="space-y-2">
-          <div className="text-[10px] text-gray-500 uppercase tracking-widest font-bold">Approach</div>
-          <h3 className="text-xl font-bold text-neon-cyan">Rapid Prototyping</h3>
-          <p className="text-sm text-gray-400">Turning abstract concepts into functional proof-of-concepts at lightning speed.</p>
-        </div>
-        <div className="space-y-2">
-          <div className="text-[10px] text-gray-500 uppercase tracking-widest font-bold">Stack</div>
-          <h3 className="text-xl font-bold text-neon-pink">AI & Computer Vision</h3>
-          <p className="text-sm text-gray-400">Leveraging PoseNet, MediaPipe, and Generative AI to create interactive interfaces.</p>
-        </div>
-        <div className="space-y-2">
-          <div className="text-[10px] text-gray-500 uppercase tracking-widest font-bold">Vision</div>
-          <h3 className="text-xl font-bold text-neon-yellow">Future Interfaces</h3>
-          <p className="text-sm text-gray-400">Exploring spatial computing, hardware integration, and decentralized systems.</p>
-        </div>
+      
+      <div className="p-8 border-l-2 border-[#00ff41] bg-black/40">
+        <p className="text-sm italic opacity-80 leading-relaxed">
+          "The future belongs to those who build it, line by line, circuit by circuit."
+        </p>
       </div>
     </div>
   );
