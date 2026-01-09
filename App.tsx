@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import Scene3D from './components/Scene3D';
 import { WindowType } from './types';
 import { AnimatePresence, motion } from 'framer-motion';
@@ -26,7 +26,6 @@ const App: React.FC = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const navigateTo = (type: WindowType) => {
-    console.log("Navigating to:", type);
     setActiveZone(type);
     setMobileMenuOpen(false);
   };
@@ -66,7 +65,7 @@ const App: React.FC = () => {
           <span className="text-xs tracking-[0.4em] font-black uppercase">Dinusha.Sys</span>
         </motion.div>
 
-        {/* Desktop Nav - CRITICAL: Added pointer-events-auto to ensure clicks register */}
+        {/* Desktop Nav - Pointer Events Auto is critical here */}
         <nav className="hidden md:flex items-center gap-2 p-1 bg-black/60 backdrop-blur-xl border border-[#00ff41]/20 rounded-full pointer-events-auto shadow-[0_0_20px_rgba(0,255,65,0.1)]">
           {menuItems.map((item) => (
             <button
@@ -159,8 +158,8 @@ const App: React.FC = () => {
       <div className="absolute top-1/2 left-8 -translate-y-1/2 hidden xl:flex flex-col gap-4 opacity-20 text-[8px] pointer-events-none select-none">
         {[...Array(12)].map((_, i) => (
           <div key={i} className="font-mono">
-            SEC_LOG::{i} -> {Math.random().toString(16).slice(2, 10).toUpperCase()}
-            <span className="ml-2 text-white/20">[{new Date().toLocaleTimeString()}]</span>
+            {`SEC_LOG::${i} -> ${Math.random().toString(16).slice(2, 10).toUpperCase()}`}
+            <span className="ml-2 text-white/20">{`[${new Date().toLocaleTimeString()}]`}</span>
           </div>
         ))}
       </div>
