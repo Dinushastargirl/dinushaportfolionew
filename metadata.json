@@ -1,0 +1,7 @@
+{
+  "name": "Dinusha Core - Creative Technologist",
+  "description": "An immersive 3D spatial portfolio showcasing experiments in AI, code, and digital art.",
+  "requestFramePermissions": [
+    "camera"
+  ]
+}
