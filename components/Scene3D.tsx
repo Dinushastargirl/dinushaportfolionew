@@ -1,175 +1,68 @@
 
-import React, { useRef, useState, useMemo } from 'react';
+import React, { useRef } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
-import { Stars, Float, MeshDistortMaterial, MeshTransmissionMaterial, Text, PerspectiveCamera, Points, PointMaterial } from '@react-three/drei';
+import { Float, PerspectiveCamera, Environment, MeshTransmissionMaterial } from '@react-three/drei';
 import * as THREE from 'three';
-import { WindowType } from '../types';
 
-interface HubNodeProps {
-  position: [number, number, number];
-  text: string;
-  color: string;
-  onClick: () => void;
-  active?: boolean;
-}
-
-const HubNode: React.FC<HubNodeProps> = ({ position, text, color, onClick, active }) => {
+const Crystal = ({ position, rotationSpeed, scale = 1 }: any) => {
   const meshRef = useRef<THREE.Mesh>(null);
-  const [hovered, setHover] = useState(false);
 
   useFrame((state) => {
     if (meshRef.current) {
-      meshRef.current.rotation.y += 0.02;
-      meshRef.current.rotation.x += 0.01;
-      const t = state.clock.getElapsedTime();
-      meshRef.current.position.y = position[1] + Math.sin(t + position[0]) * 0.1;
+      meshRef.current.rotation.x += 0.005 * rotationSpeed;
+      meshRef.current.rotation.y += 0.008 * rotationSpeed;
+      meshRef.current.position.y += Math.sin(state.clock.getElapsedTime() * rotationSpeed) * 0.002;
     }
   });
 
   return (
-    <group position={position}>
-      <mesh 
-        ref={meshRef} 
-        onClick={(e) => { e.stopPropagation(); onClick(); }}
-        onPointerOver={() => setHover(true)}
-        onPointerOut={() => setHover(false)}
-      >
-        <octahedronGeometry args={[0.7, 0]} />
-        <meshBasicMaterial 
-          color={active || hovered ? color : "#1a1a1a"} 
-          wireframe 
-          transparent 
-          opacity={0.8}
+    <Float speed={1.5} rotationIntensity={0.5} floatIntensity={0.5}>
+      <mesh ref={meshRef} position={position} scale={scale}>
+        <icosahedronGeometry args={[1, 0]} />
+        <MeshTransmissionMaterial
+          backside
+          samples={4}
+          thickness={1}
+          chromaticAberration={0.05}
+          anisotropy={0.1}
+          distortion={0.1}
+          distortionScale={0.1}
+          temporalDistortion={0.1}
+          color="#ffccd5"
+          transparent
+          opacity={0.3}
         />
-        {/* Glow inner */}
-        <mesh scale={[0.6, 0.6, 0.6]}>
-           <octahedronGeometry args={[0.7, 0]} />
-           <meshBasicMaterial color={color} transparent opacity={hovered ? 0.4 : 0.1} />
-        </mesh>
-      </mesh>
-      <Text
-        position={[0, -1, 0]}
-        fontSize={0.2}
-        color={active || hovered ? color : "#ffffff"}
-        font="https://fonts.gstatic.com/s/firacode/v10/uU9eCBsR6Z2vfEycmqhLmw.woff"
-        anchorX="center"
-        anchorY="middle"
-      >
-        {text}
-      </Text>
-    </group>
-  );
-};
-
-const DataConstellation = () => {
-  const count = 2000;
-  const positions = useMemo(() => {
-    const pos = new Float32Array(count * 3);
-    for (let i = 0; i < count; i++) {
-      pos[i * 3] = (Math.random() - 0.5) * 40;
-      pos[i * 3 + 1] = (Math.random() - 0.5) * 40;
-      pos[i * 3 + 2] = (Math.random() - 0.5) * 40;
-    }
-    return pos;
-  }, []);
-
-  const pointsRef = useRef<THREE.Points>(null);
-  useFrame((state) => {
-    if (pointsRef.current) {
-      pointsRef.current.rotation.y = state.clock.getElapsedTime() * 0.05;
-    }
-  });
-
-  return (
-    <Points ref={pointsRef} positions={positions} stride={3} frustumCulled={false}>
-      <PointMaterial
-        transparent
-        color="#00ff41"
-        size={0.05}
-        sizeAttenuation={true}
-        depthWrite={false}
-      />
-    </Points>
-  );
-};
-
-const CentralMatrix = () => {
-  const meshRef = useRef<THREE.Mesh>(null);
-  useFrame((state) => {
-    if (meshRef.current) {
-      meshRef.current.rotation.y = state.clock.getElapsedTime() * 0.2;
-      meshRef.current.rotation.z = state.clock.getElapsedTime() * 0.1;
-    }
-  });
-
-  return (
-    <Float speed={2} rotationIntensity={1} floatIntensity={0.5}>
-      <mesh ref={meshRef}>
-        <icosahedronGeometry args={[2, 1]} />
-        <meshBasicMaterial color="#00ff41" wireframe transparent opacity={0.15} />
       </mesh>
     </Float>
   );
 };
 
-const Scene3D: React.FC<{ onNavigate?: (id: WindowType) => void, activeZone?: WindowType }> = ({ onNavigate, activeZone }) => {
+const Background = () => {
   return (
-    <div className="absolute inset-0 -z-10">
+    <mesh scale={100}>
+      <sphereGeometry args={[1, 64, 64]} />
+      <meshBasicMaterial color="#fff9fa" side={THREE.BackSide} />
+    </mesh>
+  );
+};
+
+const Scene3D: React.FC = () => {
+  return (
+    <div className="fixed inset-0 -z-10 pointer-events-none opacity-60">
       <Canvas dpr={[1, 2]}>
-        <PerspectiveCamera makeDefault position={[0, 0, 10]} fov={50} />
-        <color attach="background" args={['#020203']} />
+        <PerspectiveCamera makeDefault position={[0, 0, 10]} fov={40} />
         
-        <ambientLight intensity={0.1} />
+        <ambientLight intensity={0.5} />
+        <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} intensity={1} color="#ffccd5" />
+        <pointLight position={[-10, -10, -10]} intensity={0.5} color="#ff4d6d" />
+
+        <Crystal position={[-6, 2, -2]} rotationSpeed={0.5} scale={1.2} />
+        <Crystal position={[5, -3, 0]} rotationSpeed={0.8} scale={0.8} />
+        <Crystal position={[2, 4, -5]} rotationSpeed={0.3} scale={1.5} />
         
-        <DataConstellation />
-        <CentralMatrix />
-
-        {/* Home / About */}
-        <HubNode 
-          position={[-4, 2, 0]} 
-          text="ROOT_ACCESS" 
-          color="#00ff41" 
-          onClick={() => onNavigate?.(WindowType.HOME)} 
-          active={activeZone === WindowType.HOME}
-        />
+        <Background />
         
-        {/* Projects */}
-        <HubNode 
-          position={[4, 2, 0]} 
-          text="REPOSITORIES" 
-          color="#00ff41" 
-          onClick={() => onNavigate?.(WindowType.PROJECTS)}
-          active={activeZone === WindowType.PROJECTS}
-        />
-
-        {/* Journey */}
-        <HubNode 
-          position={[-4, -2, 0]} 
-          text="HISTORY_LOG" 
-          color="#00ff41" 
-          onClick={() => onNavigate?.(WindowType.JOURNEY)}
-          active={activeZone === WindowType.JOURNEY}
-        />
-
-        {/* Contact */}
-        <HubNode 
-          position={[4, -2, 0]} 
-          text="UPLINK" 
-          color="#00ff41" 
-          onClick={() => onNavigate?.(WindowType.CONTACT)}
-          active={activeZone === WindowType.CONTACT}
-        />
-
-        {/* Qualifications */}
-        <HubNode 
-          position={[0, -4, 0]} 
-          text="CERT_ARCHIVE" 
-          color="#ffffff" 
-          onClick={() => onNavigate?.(WindowType.QUALIFICATIONS)}
-          active={activeZone === WindowType.QUALIFICATIONS}
-        />
-
-        <fog attach="fog" args={['#020203', 5, 25]} />
+        <fog attach="fog" args={['#fff9fa', 10, 30]} />
       </Canvas>
     </div>
   );

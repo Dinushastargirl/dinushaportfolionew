@@ -5,34 +5,57 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Dinusha Pushparajah | Creative Technologist</title>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@200;400;700;800&family=Playfair+Display:ital,wght@0,400;1,700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
       tailwind.config = {
         theme: {
           extend: {
             fontFamily: {
-              sans: ['Plus Jakarta Sans', 'sans-serif'],
-              serif: ['Playfair Display', 'serif'],
-              mono: ['Fira Code', 'monospace'],
+              sans: ['Inter', 'sans-serif'],
+              serif: ['Instrument Serif', 'serif'],
+            },
+            colors: {
+              studio: {
+                bg: '#fff9fa',
+                pink: '#ffccd5',
+                accent: '#ff4d6d',
+                text: '#1a1a1a'
+              }
             }
           }
         }
       }
     </script>
     <style>
-      body { margin: 0; overflow-x: hidden; background-color: #050508; color: white; }
-      ::-webkit-scrollbar { width: 4px; }
-      ::-webkit-scrollbar-track { background: transparent; }
-      ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 10px; }
-      ::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.2); }
+      body { 
+        margin: 0; 
+        background-color: #fff9fa; 
+        color: #1a1a1a; 
+        overflow-x: hidden;
+        -webkit-font-smoothing: antialiased;
+      }
       
-      canvas { cursor: grab; }
-      canvas:active { cursor: grabbing; }
+      ::selection {
+        background: #ffccd5;
+        color: #1a1a1a;
+      }
 
-      .custom-scrollbar::-webkit-scrollbar { width: 4px; }
-      .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
-      .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 10px; }
+      .soft-glow {
+        box-shadow: 0 0 40px rgba(255, 204, 213, 0.3);
+      }
+
+      .pink-gradient-text {
+        background: linear-gradient(135deg, #1a1a1a 0%, #ff4d6d 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+
+      ::-webkit-scrollbar { width: 6px; }
+      ::-webkit-scrollbar-track { background: #fff9fa; }
+      ::-webkit-scrollbar-thumb { background: #ffccd5; border-radius: 10px; }
+      
+      canvas { pointer-events: none !important; }
     </style>
 <script type="importmap">
 {

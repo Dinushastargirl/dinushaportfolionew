@@ -2,86 +2,89 @@
 import React from 'react';
 import { PROJECTS } from '../../constants';
 import { motion } from 'framer-motion';
-import { ExternalLink, ArrowRight } from 'lucide-react';
+import { ArrowUpRight } from 'lucide-react';
 
 const Projects: React.FC = () => {
-  const highlight = PROJECTS.find(p => p.status === 'highlight');
-  const others = PROJECTS.filter(p => p.status !== 'highlight');
-
   return (
-    <div className="space-y-32">
-      {/* Featured Project */}
-      {highlight && (
-        <section className="relative group">
-          <div className="flex flex-col gap-12">
-            <div className="flex items-center gap-4">
-              <span className="text-[10px] tracking-[0.5em] font-bold text-white/20 uppercase">Featured Experiment</span>
-              <div className="flex-1 h-px bg-white/5" />
-            </div>
-            
-            <div className="grid lg:grid-cols-5 gap-12 items-end">
-              <div className="lg:col-span-3">
-                <h2 className="text-6xl md:text-8xl font-black tracking-tighter mb-8 leading-none">
-                  {highlight.title}
-                </h2>
-                <p className="text-2xl text-white/40 font-light leading-relaxed max-w-2xl">
-                  {highlight.description}
-                </p>
-              </div>
-              <div className="lg:col-span-2 space-y-8">
-                <div className="flex flex-wrap gap-3">
-                  {highlight.tech.map(t => (
-                    <span key={t} className="px-4 py-2 bg-white/5 rounded-full text-[10px] uppercase tracking-widest border border-white/10">
-                      {t}
-                    </span>
-                  ))}
-                </div>
-                <a href={highlight.links?.[0]?.url} className="inline-flex items-center gap-6 px-10 py-5 bg-white text-black font-bold uppercase text-xs tracking-widest hover:bg-white/90 transition-all">
-                  Launch Project <ArrowRight size={16} />
-                </a>
-              </div>
-            </div>
-
-            <div className="aspect-[21/9] w-full overflow-hidden rounded-3xl border border-white/10">
-               <img 
-                 src={highlight.image} 
-                 alt={highlight.title} 
-                 className="w-full h-full object-cover grayscale opacity-50 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-1000 scale-105 group-hover:scale-100"
-               />
-            </div>
-          </div>
-        </section>
-      )}
+    <div className="pt-48 pb-40">
+      {/* Hero Statement */}
+      <section className="px-6 md:px-12 mb-32 max-w-7xl mx-auto">
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="space-y-8"
+        >
+          <span className="text-[10px] uppercase tracking-[0.5em] font-bold text-studio-accent">Featured Experiments</span>
+          <h2 className="text-6xl md:text-9xl font-serif italic leading-[0.85] tracking-tighter">
+            Digital craftsmanship <br /> driven by <span className="pink-gradient-text">curiosity.</span>
+          </h2>
+        </motion.div>
+      </section>
 
       {/* Projects Grid */}
-      <section className="space-y-12">
-        <div className="flex items-center gap-4">
-          <span className="text-[10px] tracking-[0.5em] font-bold text-white/20 uppercase">Archive</span>
-          <div className="flex-1 h-px bg-white/5" />
-        </div>
-        
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {others.map((project, i) => (
+      <section className="px-6 md:px-12">
+        <div className="grid gap-40 max-w-7xl mx-auto">
+          {PROJECTS.map((project, index) => (
             <motion.div
               key={project.id}
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 40 }}
               whileInView={{ opacity: 1, y: 0 }}
-              transition={{ delay: i * 0.1 }}
-              className="group cursor-pointer"
+              viewport={{ once: true, margin: "-100px" }}
+              transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+              className={`grid lg:grid-cols-12 gap-12 items-center ${index % 2 === 0 ? '' : 'lg:flex-row-reverse'}`}
             >
-              <div className="aspect-[4/3] w-full bg-white/5 rounded-2xl overflow-hidden mb-6 border border-white/5 group-hover:border-white/20 transition-all">
-                <img 
-                  src={project.image} 
-                  alt={project.title} 
-                  className="w-full h-full object-cover grayscale opacity-30 group-hover:grayscale-0 group-hover:opacity-80 transition-all duration-700"
-                />
+              {/* Project Image */}
+              <div className={`lg:col-span-8 group relative overflow-hidden rounded-2xl bg-studio-pink/10 soft-glow ${index % 2 === 0 ? '' : 'lg:order-2'}`}>
+                <div className="aspect-[16/10] w-full overflow-hidden">
+                  <img 
+                    src={project.image} 
+                    alt={project.title} 
+                    className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"
+                  />
+                </div>
+                {/* Overlay on hover */}
+                <div className="absolute inset-0 bg-studio-accent/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
               </div>
-              <h3 className="text-xl font-bold mb-2 flex items-center justify-between">
-                {project.title}
-                <ExternalLink size={14} className="opacity-0 group-hover:opacity-100 transition-opacity" />
-              </h3>
-              <p className="text-sm text-white/40 font-light line-clamp-2">{project.description}</p>
+
+              {/* Project Info */}
+              <div className={`lg:col-span-4 space-y-8 ${index % 2 === 0 ? '' : 'lg:order-1'}`}>
+                <div className="space-y-4">
+                  <div className="flex gap-4">
+                    {project.tech.slice(0, 2).map(t => (
+                      <span key={t} className="text-[9px] uppercase tracking-widest font-bold opacity-40">{t}</span>
+                    ))}
+                  </div>
+                  <h3 className="text-4xl md:text-5xl font-serif italic leading-tight">{project.title}</h3>
+                  <p className="text-sm text-studio-text/60 leading-relaxed font-light">
+                    {project.description.slice(0, 160)}...
+                  </p>
+                </div>
+                
+                <div className="flex items-center gap-6">
+                  <a 
+                    href={project.links?.[0]?.url} 
+                    target="_blank" 
+                    rel="noreferrer"
+                    className="group flex items-center gap-4 text-[10px] uppercase tracking-widest font-black"
+                  >
+                    View Project
+                    <div className="w-10 h-10 border border-studio-text/10 rounded-full flex items-center justify-center group-hover:bg-studio-accent group-hover:border-studio-accent group-hover:text-white transition-all">
+                      <ArrowUpRight size={14} />
+                    </div>
+                  </a>
+                </div>
+              </div>
             </motion.div>
+          ))}
+        </div>
+      </section>
+
+      {/* Archive / More */}
+      <section className="mt-60 px-6 md:px-12 text-center">
+        <h3 className="text-[10px] uppercase tracking-[0.5em] font-black mb-12 opacity-30">And many more...</h3>
+        <div className="max-w-2xl mx-auto flex flex-wrap justify-center gap-4">
+          {["AI Skin Scanner", "PickHer", "Heart Rate Art", "One Dial Hardware", "Nekatha Countdown"].map(item => (
+            <span key={item} className="px-6 py-2 border border-studio-pink rounded-full text-xs font-medium text-studio-text/60">{item}</span>
           ))}
         </div>
       </section>

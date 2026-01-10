@@ -1,69 +1,84 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
-// Fixed missing Terminal import
-import { ArrowRight, Github, Linkedin, Cpu, Activity, ShieldCheck, Terminal } from 'lucide-react';
+import { USER_PORTRAIT_MAIN, SKILLS } from '../../constants';
+import { ArrowUpRight } from 'lucide-react';
 
 const Home: React.FC = () => {
   return (
-    <div className="space-y-12">
-      <div className="grid lg:grid-cols-2 gap-12 items-start">
-        <motion.div
-          initial={{ opacity: 0, x: -20 }}
-          animate={{ opacity: 1, x: 0 }}
-          className="space-y-8"
-        >
-          <div className="inline-block px-3 py-1 bg-[#00ff41]/10 border border-[#00ff41]/40 rounded text-[10px] font-bold uppercase tracking-[0.2em]">
-            Permission: Admin
-          </div>
-          <h1 className="text-5xl md:text-8xl font-black leading-none tracking-tighter uppercase italic">
-            Dinusha <br /> <span className="text-white">Pushparajah</span>
-          </h1>
-          <p className="text-xl text-[#00ff41]/60 leading-relaxed font-mono">
-            Creative Technologist & Builder. <br />
-            I bridge the gap between high-level engineering and immersive artistic vision. 
-            Currently architecting digital experiences and hardware solutions.
-          </p>
-          
-          <div className="flex flex-wrap gap-4">
-            <a href="#" className="px-6 py-3 bg-[#00ff41] text-black font-bold text-xs uppercase tracking-widest hover:bg-white transition-all">
-              Execute Portfolio.sh
-            </a>
-            <div className="flex gap-4">
-              <a href="#" className="p-3 border border-[#00ff41]/20 hover:bg-[#00ff41]/10"><Github size={18} /></a>
-              <a href="#" className="p-3 border border-[#00ff41]/20 hover:bg-[#00ff41]/10"><Linkedin size={18} /></a>
+    <div className="pt-40 px-6 md:px-12 pb-32">
+      <div className="max-w-7xl mx-auto">
+        <div className="grid lg:grid-cols-2 gap-24 items-center">
+          <motion.div
+            initial={{ opacity: 0, x: -30 }}
+            animate={{ opacity: 1, x: 0 }}
+            className="space-y-12"
+          >
+            <div className="space-y-6">
+              <span className="text-[10px] uppercase tracking-[0.4em] font-bold text-studio-text/30">Profile / Creative Technologist</span>
+              <h1 className="text-6xl md:text-8xl font-serif italic leading-[0.9] pink-gradient-text">
+                Solving problems <br /> through code <br /> and design.
+              </h1>
             </div>
-          </div>
-        </motion.div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div className="p-6 border border-[#00ff41]/20 bg-[#00ff41]/5 rounded group hover:border-[#00ff41] transition-all">
-            <Cpu className="mb-4 opacity-50 group-hover:opacity-100" />
-            <h3 className="text-lg font-bold mb-2 uppercase tracking-tighter">Hardware Eng</h3>
-            <p className="text-xs opacity-60">Architecting 'One Dial' from scratch. IoT & PCB design.</p>
-          </div>
-          <div className="p-6 border border-[#00ff41]/20 bg-[#00ff41]/5 rounded group hover:border-[#00ff41] transition-all">
-            <ShieldCheck className="mb-4 opacity-50 group-hover:opacity-100" />
-            <h3 className="text-lg font-bold mb-2 uppercase tracking-tighter">CyberOps</h3>
-            <p className="text-xs opacity-60">Security-first development mindset across all technical stacks.</p>
-          </div>
-          <div className="p-6 border border-[#00ff41]/20 bg-[#00ff41]/5 rounded group hover:border-[#00ff41] transition-all">
-            <Activity className="mb-4 opacity-50 group-hover:opacity-100" />
-            <h3 className="text-lg font-bold mb-2 uppercase tracking-tighter">AI Systems</h3>
-            <p className="text-xs opacity-60">Integrating MediaPipe & computer vision for interaction.</p>
-          </div>
-          <div className="p-6 border border-[#00ff41]/20 bg-[#00ff41]/5 rounded group hover:border-[#00ff41] transition-all">
-            <Terminal className="mb-4 opacity-50 group-hover:opacity-100" />
-            <h3 className="text-lg font-bold mb-2 uppercase tracking-tighter">Full Stack</h3>
-            <p className="text-xs opacity-60">Python, Rust, React. Building robust backend architectures.</p>
+            <p className="text-xl md:text-2xl font-light leading-relaxed text-studio-text/70 max-w-lg">
+              I am <span className="text-studio-text font-medium">Dinusha Pushparajah</span>. 
+              I specialize in bridging high-level engineering with immersive artistic vision. 
+              From IoT hardware to real-time AI interactions.
+            </p>
+
+            <div className="pt-8 grid grid-cols-2 gap-8">
+              <div className="space-y-2">
+                <h4 className="text-[10px] uppercase tracking-widest font-black">Expertise</h4>
+                <ul className="text-sm space-y-1 text-studio-text/60">
+                  <li>Full Stack Development</li>
+                  <li>IoT & Hardware Eng.</li>
+                  <li>AI / Machine Learning</li>
+                  <li>Product Strategy</li>
+                </ul>
+              </div>
+              <div className="space-y-2">
+                <h4 className="text-[10px] uppercase tracking-widest font-black">Currently</h4>
+                <ul className="text-sm space-y-1 text-studio-text/60">
+                  <li>Uni. of Colombo, CS</li>
+                  <li>UoPeople Scholarship</li>
+                  <li>One Dial Hardware</li>
+                </ul>
+              </div>
+            </div>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="relative"
+          >
+            <div className="aspect-[4/5] bg-studio-pink/20 rounded-2xl overflow-hidden soft-glow">
+              <img 
+                src={USER_PORTRAIT_MAIN} 
+                alt="Dinusha" 
+                className="w-full h-full object-cover mix-blend-multiply opacity-80"
+              />
+            </div>
+            {/* Floating Stats */}
+            <div className="absolute -bottom-10 -left-10 bg-white p-8 rounded-2xl shadow-xl border border-studio-pink/20 hidden md:block">
+              <span className="block text-4xl font-serif italic mb-2">20+</span>
+              <span className="text-[10px] uppercase tracking-widest font-bold opacity-40">Projects Launched</span>
+            </div>
+          </motion.div>
+        </div>
+
+        {/* Skills Marquee style */}
+        <div className="mt-40 border-t border-studio-pink/30 pt-12">
+          <h3 className="text-[10px] uppercase tracking-[0.3em] font-black mb-12 text-center opacity-30 italic">Technologies & Tools</h3>
+          <div className="flex flex-wrap justify-center gap-x-12 gap-y-8">
+            {SKILLS.map((skill) => (
+              <span key={skill} className="text-3xl md:text-5xl font-serif italic text-studio-text/20 hover:text-studio-accent transition-colors cursor-default">
+                {skill}
+              </span>
+            ))}
           </div>
         </div>
-      </div>
-      
-      <div className="p-8 border-l-2 border-[#00ff41] bg-black/40">
-        <p className="text-sm italic opacity-80 leading-relaxed">
-          "The future belongs to those who build it, line by line, circuit by circuit."
-        </p>
       </div>
     </div>
   );
